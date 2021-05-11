@@ -19,6 +19,7 @@
 
 package org.matsim.contrib.minibus.hook;
 
+import com.sun.xml.bind.v2.TODO;
 import org.apache.log4j.Logger;
 import org.matsim.api.core.v01.Coord;
 import org.matsim.api.core.v01.Id;
@@ -197,6 +198,8 @@ public final class PBox implements POperators {
 		}
 
 		this.ticketMachine.setActBasedSubs(actBasedSub);
+
+
 
 		// Reset the franchise system - TODO necessary?
 		this.franchise.reset(this.operators);

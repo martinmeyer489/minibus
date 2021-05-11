@@ -32,6 +32,7 @@ import org.matsim.core.config.Config;
 import org.matsim.core.config.ConfigUtils;
 import org.matsim.core.controler.AbstractModule;
 import org.matsim.core.controler.Controler;
+import org.matsim.core.controler.OutputDirectoryHierarchy;
 import org.matsim.core.population.algorithms.TripsToLegsAlgorithm;
 import org.matsim.core.router.MainModeIdentifier;
 import org.matsim.core.router.MainModeIdentifierImpl;
@@ -52,10 +53,23 @@ public final class RunMinibus {
 	private final static Logger log = Logger.getLogger(RunMinibus.class);
 
 	public static void main(final String[] args) {
-		Config config = ConfigUtils.loadConfig( args[0], new PConfigGroup() ) ;
+//		Config config = ConfigUtils.loadConfig( args[0], new PConfigGroup() ) ;
+		Config config =ConfigUtils.loadConfig("/Users/MeyerMa/IdeaProjects/minibus_meyer/Input/config_minibuses_manser.xml");
+
+		config.network().setInputFile("/Users/MeyerMa/IdeaProjects/minibus_meyer/Input/network.xml");
+		config.plans().setInputFile("/Users/MeyerMa/IdeaProjects/minibus_meyer/Input/population_1000_per_hour_each_from_6_to_10.xml.gz");
+		config.transit().setTransitScheduleFile("/Users/MeyerMa/IdeaProjects/minibus_meyer/Input/transitSchedule_60min.xml");
+		config.transit().setVehiclesFile("/Users/MeyerMa/IdeaProjects/minibus_meyer/Input/transitVehicles.xml");
+		config.controler().setOverwriteFileSetting(OutputDirectoryHierarchy.OverwriteFileSetting.deleteDirectoryIfExists);
+		config.controler().setOutputDirectory("/Users/MeyerMa/IdeaProjects/minibus_meyer/output/");
+		config.controler().setLastIteration(50);
+		//config.facilities().setInputFile("/Users/MeyerMa/Downloads/berlin-v5.5-10pct.output_facilities.xml");
+
 
 		Scenario scenario = ScenarioUtils.createScenario(config);
 		ScenarioUtils.loadScenario(scenario);
+
+
 
 		MainModeIdentifier mainModeIdentifier = new MainModeIdentifierImpl();
 		TripsToLegsAlgorithm algorithm = new TripsToLegsAlgorithm(mainModeIdentifier);
@@ -90,7 +104,7 @@ public final class RunMinibus {
 			}
 		});
 
-		boolean subsidies = false;
+		boolean subsidies = true;
 		if (subsidies) {
 			PConfigGroup pConfig = ConfigUtils.addOrGetModule(config, PConfigGroup.class);
 			pConfig.setUseSubsidyApproach(true);
